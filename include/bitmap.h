@@ -42,36 +42,45 @@ struct pixel
 
 class bitmap
 {
-  uint16_t _height;
-  uint16_t _width;
-  std::string _filename;
+  uint16_t m_height;
+  uint16_t m_width;
+  std::string m_filename;
 
   // default bg color set to white
-  pixel _bg_color = {.blue = 255, .green = 255, .red = 255};
-  std::vector<pixel> _pixels;
+  pixel m_bg_color = {.blue = 255, .green = 255, .red = 255};
+  std::vector<pixel> m_pixels;
 
-  uint8_t _calculate_row_padding();
+  uint8_t m_calculate_row_padding();
 
 public:
   bitmap(std::string filename, uint16_t width, uint16_t height)
-      : _filename(filename), _height(height), _width(width),
-        _pixels(height * width, _bg_color) {}
+      : m_filename(filename), m_height(height), m_width(width),
+        m_pixels(height * width, m_bg_color) {}
 
-  uint16_t getHeight() const { return _height; }
-  void setHeight(const uint16_t height) { _height = height; }
+  uint16_t getHeight() const { return m_height; }
+  void setHeight(const uint16_t height) { m_height = height; }
 
-  uint16_t getWidth() const { return _width; }
-  void setWidth(const uint16_t width) { _width = width; }
+  uint16_t getWidth() const { return m_width; }
+  void setWidth(const uint16_t width) { m_width = width; }
 
+  /*
+  * @brief Checks if the x and y are apart of the bitmap
+  */
   bool is_out_of_bound(const uint16_t x, const uint16_t y) const;
 
-  const std::string &getFilename() const { return _filename; }
-  void setFilename(const std::string &filename) { _filename = filename; }
+  const std::string &getFilename() const { return m_filename; }
+  void setFilename(const std::string &filename) { m_filename = filename; }
 
   bool setPixel(const pixel p, const uint16_t x, const uint16_t y);
   const pixel &getPixel(uint16_t x, uint16_t y);
+
+  /*
+  * @brief Scaling a pixel verticaly and horizentaly by scale value. 
+  */
   bool scaleUpPixel(const pixel p, uint16_t x, uint16_t y, int8_t scale);
-  bool writeAsASCIItoDisk(const char space = ' ', const char character = '#');
+
+
+  bool writeAsASCIIfileToDisk(const char whitespace = ' ', const char ASCIIcharacter = '#');
   bool writeToDisk();
 };
 

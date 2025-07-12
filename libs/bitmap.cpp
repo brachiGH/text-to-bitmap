@@ -5,7 +5,7 @@
 
 bool bitmap::is_out_of_bound(const uint16_t x, const uint16_t y) const
 {
-  if (x > (_width - 1) || y > (_height - 1))
+  if (x > (m_width - 1) || y > (m_height - 1))
   {
     return true;
   }
@@ -13,9 +13,9 @@ bool bitmap::is_out_of_bound(const uint16_t x, const uint16_t y) const
   return false;
 }
 
-uint8_t bitmap::_calculate_row_padding()
+uint8_t bitmap::m_calculate_row_padding()
 {
-  uint8_t temp = _width * sizeof(pixel) % 4;
+  uint8_t temp = m_width * sizeof(pixel) % 4;
   if (temp == 0)
   {
     return 0;
@@ -30,14 +30,14 @@ bool bitmap::setPixel(const pixel p, const uint16_t x, const uint16_t y)
     return false;
   }
 
-  _pixels[y * _width + x] = p;
+  m_pixels[y * m_width + x] = p;
 
   return true;
 };
 
 const pixel &bitmap::getPixel(uint16_t x, uint16_t y)
 {
-  return _pixels[y * _width + x];
+  return m_pixels[y * m_width + x];
 };
 
 bool bitmap::scaleUpPixel(const pixel p, uint16_t x, uint16_t y, int8_t scale)
@@ -55,19 +55,19 @@ bool bitmap::scaleUpPixel(const pixel p, uint16_t x, uint16_t y, int8_t scale)
   return status;
 };
 
-bool bitmap::writeAsASCIItoDisk(const char space, const char character)
+bool bitmap::writeAsASCIIfileToDisk(const char whitespace, const char ASCIIcharacter)
 {
-  std::ofstream file(_filename + ".txt");
+  std::ofstream file(m_filename + ".txt");
   if (!file)
   {
     return false;
   }
 
-  for (size_t i = 0; i < _height; i++)
+  for (size_t i = 0; i < m_height; i++)
   {
-    for (size_t j = 0; j < _width; j++)
+    for (size_t j = 0; j < m_width; j++)
     {
-      file << (_pixels[i * _width + j].blue == 0 ? character : space);
+      file << (m_pixels[i * m_width + j].blue == 0 ? ASCIIcharacter : whitespace);
     }
     file << std::endl;
   }
@@ -82,14 +82,14 @@ bool bitmap::writeToDisk()
   bitmap_file_header bfh;
   bitmap_info_header bih;
 
-  bih.width = _width;
-  bih.height = _height;
+  bih.width = m_width;
+  bih.height = m_height;
 
   bfh.data_offset = sizeof(bitmap_file_header) + sizeof(bitmap_info_header);
-  bih.data_size = _width * _height * sizeof(pixel);
+  bih.data_size = m_width * m_height * sizeof(pixel);
   bfh.file_size = bfh.data_offset + bih.data_size;
 
-  std::ofstream file(_filename + ".bmp", std::ios::binary);
+  std::ofstream file(m_filename + ".bmp", std::ios::binary);
   if (!file)
   {
     return false;
@@ -98,12 +98,12 @@ bool bitmap::writeToDisk()
   file.write(reinterpret_cast<char *>(&bfh), sizeof(bfh));
   file.write(reinterpret_cast<char *>(&bih), sizeof(bih));
 
-  uint8_t padding = _calculate_row_padding();
-  for (ssize_t y = _height - 1; y >= 0; y--)
+  uint8_t padding = m_calculate_row_padding();
+  for (ssize_t y = m_height - 1; y >= 0; y--)
   {
-    for (size_t x = 0; x < _width; x++)
+    for (size_t x = 0; x < m_width; x++)
     {
-      file.write(reinterpret_cast<char *>(&_pixels[y * _width + x]), sizeof(pixel));
+      file.write(reinterpret_cast<char *>(&m_pixels[y * m_width + x]), sizeof(pixel));
     }
 
     for (uint8_t i = 0; i < padding; i++)
@@ -112,7 +112,7 @@ bool bitmap::writeToDisk()
     }
   }
 
-  file.write(reinterpret_cast<char *>(_pixels.data()), bih.data_size);
+  file.write(reinterpret_cast<char *>(m_pixels.data()), bih.data_size);
 
   file.close();
 
