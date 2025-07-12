@@ -1,14 +1,13 @@
 #include <sstream>
 
 #include "text_renderer.h"
-#include "validators.hpp"
 
 // Check if the line contains only valid chars before setting it
 // if false if returned, this means the line is unvalid and not
 // going to be set.
 bool line_t::setline(std::string &ln) {
   for (auto c : ln) {
-    if (!is_valid_char(c)) {
+    if (_font.find(c) == _font.end()) {
       return false;
     }
   }
@@ -33,17 +32,17 @@ void line_t::_vector_to_bitmap(uint16_t offset_x, uint16_t offset_y, bitmap *bm,
 }
 
 // Inserts pxiels that forms the text in the line into the bitman
-void line_t::_print(bitmap *bm, const font_t &ft, uint16_t offset_y) const {
+void line_t::_print(bitmap *bm, uint16_t offset_y) const {
   uint16_t offset_x = _offset_x;
 
   for (auto c : _line) {
-    _vector_to_bitmap(offset_x, offset_y, bm, ft.at((c)));
+    _vector_to_bitmap(offset_x, offset_y, bm, _font.at(c));
     offset_x += (FONT_CHAR_WIDTH_IN_PIXELS + _character_spacing) * _font_size;
   }
 }
 
-void line_t::print(bitmap *bm, const font_t &ft) const {
-  _print(bm, ft, _offset_y);
+void line_t::print(bitmap *bm) const {
+  _print(bm, _offset_y);
 }
 
 // Get height of the line in pixels
@@ -78,7 +77,7 @@ bool text_area::text(string &text) {
 
   while (std::getline(ss, line)) {
     line_t *ln = new line_t(offset_x, offset_y);
-    if (ln->setline(line)) {
+    if (!ln->setline(line)) {
       return false;
     }
 
@@ -126,9 +125,9 @@ uint16_t text_area::getWidth() const {
          fontSize();
 }
 
-void text_area::print(bitmap *bm, const font_t &font) const {
+void text_area::print(bitmap *bm) const {
   for (auto line : _lines) {
-    line->print(bm, font);
+    line->print(bm);
   }
 }
 

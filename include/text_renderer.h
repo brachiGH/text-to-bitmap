@@ -1,6 +1,7 @@
 #ifndef TEXT_RENDERER_H_
 #define TEXT_RENDERER_H_
 
+#include "../font/basic/basic_font.h"
 #include "bitmap.h"
 #include "font.h"
 #include <cstdint>
@@ -23,12 +24,13 @@ private:
   // the default color is black
   color_t _color = {.blue = 0, .green = 0, .red = 0};
   string _line;
+  font_t _font = font::basic::kFontMap;
 
   void _vector_to_bitmap(uint16_t x, uint16_t y, bitmap *bm,
                          const std::vector<bool> &character) const;
 
   // Inserts pxiels that forms the text in the line into the bitman
-  void _print(bitmap *bm, const font_t &font, uint16_t offset_y) const;
+  void _print(bitmap *bm, uint16_t offset_y) const;
 
 public:
   // New line with offset set to absolute postion
@@ -50,7 +52,14 @@ public:
   }
 
   string getline() const { return _line; };
+  bool setline(string &ln, const font_t &ft) {
+    _font = ft;
+    return setline(ln);
+  };
   bool setline(string &ln);
+
+  void setfont(const font_t &ft) { _font = ft; };
+  font_t font() const { return _font; };
 
   uint8_t characterSpacing() const { return _character_spacing; };
   void characterSpacing(uint8_t cs) { _character_spacing = cs; };
@@ -58,7 +67,7 @@ public:
   virtual uint16_t getHeight() const;
   virtual uint16_t getWidth() const;
 
-  virtual void print(bitmap *bm, const font_t &font) const;
+  virtual void print(bitmap *bm) const;
 
   virtual ~line_t() {}
 };
@@ -73,8 +82,13 @@ public:
   string getline() = delete;
   bool setline(string ln) = delete;
 
-  string text() const;     // get Text inside the text area
-  bool text(string &text); // set the text inside the text area
+  string text() const; // get Text inside the text area
+  // set the text inside the text area
+  bool text(string &t, const font_t &ft) {
+    setfont(ft);
+    return text(t);
+  };
+  bool text(string &t);
 
   uint8_t linespacing() const { return _line_spacing; };
   void linespacing(uint8_t ls);
@@ -91,7 +105,7 @@ public:
   text_area(const text_area &other);
   text_area &operator=(const text_area &other);
 
-  void print(bitmap *bm, const font_t &font) const override;
+  void print(bitmap *bm) const override;
 };
 
 #endif
