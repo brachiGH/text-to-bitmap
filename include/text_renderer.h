@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <memory>
 
 using std::string;
 using color_t = pixel;
@@ -19,26 +20,26 @@ private:
   uint16_t m_offset_y;
 
   // the font is based of the height and width in the font file
+  font_t m_font = font::basic::kFontMap;
   uint8_t m_font_size = 5;
   uint8_t m_character_spacing = 2;
 
   // the default color is black
   color_t m_color = {.blue = 0, .green = 0, .red = 0};
   string m_line;
-  font_t m_font = font::basic::kFontMap;
 
-  void m_vector_to_bitmap(const uint16_t x, const uint16_t y, bitmap *bm,
-                         const std::vector<bool> &character) const;
+  void m_vector_to_bitmap(const uint16_t x, const uint16_t y, std::shared_ptr<bitmap> bm,
+                          const std::vector<bool> character) const;
 
   /*
-  * @brief Inserts pxiels that forms the text in the line into the bitman
-  */
-  bool m_print(bitmap *bm, const uint16_t offset_y) const;
+   * @brief Inserts pxiels that forms the text in the line into the bitman
+   */
+  bool m_print(std::shared_ptr<bitmap> bm, const uint16_t offset_y) const;
 
 public:
-  /* 
-  * @brief New line with offset set to absolute postion
-  */
+  /*
+   * @brief New line with offset set to absolute postion
+   */
   line_t() : m_offset_x(0), m_offset_y(0) {};
   line_t(int x, int y) : m_offset_x(x), m_offset_y(y) {};
 
@@ -70,15 +71,15 @@ public:
   const font_t &font() const { return m_font; };
 
   /*
-  * @brief Set character spacing in pixels
-  */
+   * @brief Set character spacing in pixels
+   */
   uint8_t characterSpacing() const { return m_character_spacing; };
   void characterSpacing(const uint8_t cs) { m_character_spacing = cs; };
 
   virtual uint16_t getHeight() const;
   virtual uint16_t getWidth() const;
 
-  virtual bool print(bitmap *bm) const;
+  virtual bool print(std::shared_ptr<bitmap> bm) const;
 
   virtual ~line_t() {}
 };
@@ -96,12 +97,12 @@ public:
   void setline(const string &ln, const font_t &ft) = delete;
 
   /*
-  * @brief Get Text inside the text area
-  */
+   * @brief Get Text inside the text area
+   */
   string text() const;
   /*
-  * @brief set the text inside the text area
-  */
+   * @brief set the text inside the text area
+   */
   void text(const string &t, const font_t &ft)
   {
     setfont(ft);
@@ -110,8 +111,8 @@ public:
   void text(const string &t);
 
   /*
-  * @brief Set line spacing in pixels
-  */
+   * @brief Set line spacing in pixels
+   */
   uint8_t linespacing() const { return m_line_spacing; };
   void linespacing(const uint8_t ls);
 
@@ -126,7 +127,7 @@ public:
   text_area(const text_area &other);
   text_area &operator=(const text_area &other);
 
-  bool print(bitmap *bm) const override;
+  bool print(std::shared_ptr<bitmap> bm) const override;
 };
 
 #endif

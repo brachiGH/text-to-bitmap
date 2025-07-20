@@ -23,7 +23,7 @@ uint8_t bitmap::m_calculate_row_padding()
   return 4 - temp;
 }
 
-bool bitmap::setPixel(const pixel p, const uint16_t x, const uint16_t y)
+bool bitmap::setPixel(const pixel &p, const uint16_t x, const uint16_t y)
 {
   if (is_out_of_bound(x, y))
   {
@@ -40,7 +40,7 @@ const pixel &bitmap::getPixel(uint16_t x, uint16_t y)
   return m_pixels[y * m_width + x];
 };
 
-bool bitmap::scaleUpPixel(const pixel p, uint16_t x, uint16_t y, int8_t scale)
+bool bitmap::scaleUpPixel(const pixel &p, uint16_t x, uint16_t y, int8_t scale)
 {
   bool status = true;
 

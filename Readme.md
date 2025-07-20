@@ -10,7 +10,7 @@ A simple text to ascci and to bitmap image libarary:
 
 int main() {
     // Initiating a bitmap with width=400px and height=900px
-    bitmap bm{"test", 400, 900};
+    bstd::shared_ptr<bitmap> bm = std::make_shared<bitmap>("test", 400, 900);
 
     // Creating an obj of type text are to write into starting at offset x=10px and y=10px
     text_area txt{10, 10};
@@ -20,10 +20,10 @@ int main() {
     txt.text(temp, font::basic::kFontMap);
 
     // Printing the text on the bitmap
-    txt.print(&bm);
+    txt.print(bm);
 
-    bm.writeAsASCIIfileToDisk();
-    bm.writeToDisk();
+    bm->writeAsASCIIfileToDisk();
+    bm->writeToDisk();
 }
 ```
 result:
@@ -37,7 +37,7 @@ result:
 
 ### **bitmap.h**: bitmap Class API
 
-This class provides an interface for creating, manipulating, and saving bitmap images.
+This class provides an interface for creating and saving bitmap images.
 
 ```cpp
 // Constructor
@@ -66,15 +66,12 @@ bool writeToDisk();
 
 ### **text_renderer.h**: line_t Class API
 
-This API provides classes for rendering single lines of text or multi-line text areas onto a bitmap.
+This API provides classes for rendering single line onto a bitmap.
 
 ```cpp
 // Constructors
 line_t();
 line_t(int x, int y);
-
-// Destructor
-virtual ~line_t();
 
 // Getters
 uint16_t offsetX() const;
@@ -104,19 +101,14 @@ virtual bool print(bitmap* bm) const;
 
 ### **text_renderer.h**: text_area Class API
 
-The text_area class inherits from line_t and manages multiple lines of text, handling word wrapping and line spacing.
+The text_area class inherits from line_t and Renders multiple lines of text.
 
 ```cpp
 // Constructor
 text_area(const int x, const int y);
 
-// Destructor, Copy Constructor, Assignment Operator
-~text_area();
-text_area(const text_area& other);
-text_area& operator=(const text_area& other);
-
 // Text Management
-std::string text() const;
+std::string text() const; // get text
 void text(const std::string& t, const font_t& ft);
 void text(const std::string& t);
 
@@ -124,11 +116,6 @@ void text(const std::string& t);
 uint8_t linespacing() const;
 void linespacing(const uint8_t ls);
 void fontSize(const uint8_t fs); // Overrides base class behavior for all lines
-
-// Overridden Virtual Functions
-uint16_t getHeight() const override;
-uint16_t getWidth() const override;
-bool print(bitmap* bm) const override;
 
 // Deleted Functions (not available in text_area)
 const std::string& getline() = delete;
@@ -143,14 +130,14 @@ void setline(const std::string& ln, const font_t& ft) = delete;
 #include "text_renderer.h"
 
 int main() {
-    bitmap bm{"test", 280, 60};
+    std::shared_ptr<bitmap> bm = std::make_shared<bitmap>("test", 400, 900);
     line_t txt{10, 10};
     std::string temp = "&test123456789";
     txt.setline(temp, font::basic::kFontMap);
 
-    txt.print(&bm);
-    bm.writeAsASCIIfileToDisk();
-    bm.writeToDisk();
+    txt.print(bm);
+    bm->writeAsASCIIfileToDisk();
+    bm->writeToDisk();
 }
 ```
 result:

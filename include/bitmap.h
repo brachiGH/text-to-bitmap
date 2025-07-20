@@ -64,21 +64,20 @@ public:
   void setWidth(const uint16_t width) { m_width = width; }
 
   /*
-  * @brief Checks if the x and y are apart of the bitmap
-  */
+   * @brief Checks if the x and y are apart of the bitmap
+   */
   bool is_out_of_bound(const uint16_t x, const uint16_t y) const;
 
   const std::string &getFilename() const { return m_filename; }
-  void setFilename(const std::string &filename) { m_filename = filename; }
+  void setFilename(const std::string filename) { m_filename = filename; }
 
-  bool setPixel(const pixel p, const uint16_t x, const uint16_t y);
+  bool setPixel(const pixel &p, const uint16_t x, const uint16_t y);
   const pixel &getPixel(uint16_t x, uint16_t y);
 
   /*
-  * @brief Scaling a pixel verticaly and horizentaly by scale value. 
-  */
-  bool scaleUpPixel(const pixel p, uint16_t x, uint16_t y, int8_t scale);
-
+   * @brief Scaling a pixel verticaly and horizentaly by scale value.
+   */
+  bool scaleUpPixel(const pixel &p, uint16_t x, uint16_t y, int8_t scale);
 
   bool writeAsASCIIfileToDisk(const char whitespace = ' ', const char ASCIIcharacter = '#');
   bool writeToDisk();

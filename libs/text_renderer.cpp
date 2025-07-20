@@ -20,8 +20,8 @@ void line_t::setline(const std::string &ln)
 };
 
 void line_t::m_vector_to_bitmap(const uint16_t offset_x,
-                               const uint16_t offset_y, bitmap *bm,
-                               const std::vector<bool> &character) const
+                                const uint16_t offset_y, std::shared_ptr<bitmap> bm,
+                                const std::vector<bool> character) const
 {
   for (size_t yi = 0; yi < FONT_CHAR_HEIGHT_IN_PIXELS; yi++)
   {
@@ -38,7 +38,7 @@ void line_t::m_vector_to_bitmap(const uint16_t offset_x,
 }
 
 // Inserts pxiels that forms the text in the line into the bitman
-bool line_t::m_print(bitmap *bm, const uint16_t offset_y) const
+bool line_t::m_print(std::shared_ptr<bitmap> bm, const uint16_t offset_y) const
 {
   uint16_t offset_x = m_offset_x;
   if (bm->is_out_of_bound(offset_x, offset_y))
@@ -60,7 +60,7 @@ bool line_t::m_print(bitmap *bm, const uint16_t offset_y) const
   return true;
 }
 
-bool line_t::print(bitmap *bm) const
+bool line_t::print(std::shared_ptr<bitmap> bm) const
 {
   return m_print(bm, m_offset_y);
 }
@@ -153,7 +153,7 @@ uint16_t text_area::getWidth() const
          fontSize();
 }
 
-bool text_area::print(bitmap *bm) const
+bool text_area::print(std::shared_ptr<bitmap> bm) const
 {
   bool status = true;
   for (auto line : m_lines)
