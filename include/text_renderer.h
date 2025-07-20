@@ -59,13 +59,13 @@ public:
     m_color = {.blue = b, .green = g, .red = r};
   }
 
-  const string &getline() const { return m_line; };
-  void setline(const string &ln, const font_t &ft)
+  const string getline() const { return m_line; };
+  void setline(const string ln, const font_t &ft)
   {
     m_font = ft;
     setline(ln);
   };
-  void setline(const string &ln);
+  void setline(const string ln);
 
   void setfont(const font_t &ft) { m_font = ft; };
   const font_t &font() const { return m_font; };
@@ -93,8 +93,8 @@ public:
   text_area(const int x, const int y) : line_t(x, y) {};
 
   const string &getline() = delete;
-  void setline(const string &ln) = delete;
-  void setline(const string &ln, const font_t &ft) = delete;
+  void setline(const string ln) = delete;
+  void setline(const string ln, const font_t &ft) = delete;
 
   /*
    * @brief Get Text inside the text area
@@ -103,12 +103,12 @@ public:
   /*
    * @brief set the text inside the text area
    */
-  void text(const string &t, const font_t &ft)
+  void text(const string t, const font_t &ft)
   {
     setfont(ft);
     text(t);
   };
-  void text(const string &t);
+  void text(const string t);
 
   /*
    * @brief Set line spacing in pixels

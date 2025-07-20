@@ -6,7 +6,7 @@
 // Check if the line contains only valid chars before setting it
 // if false if returned, this means the line is unvalid and not
 // going to be set.
-void line_t::setline(const std::string &ln)
+void line_t::setline(const std::string ln)
 {
   for (auto c : ln)
   {
@@ -93,7 +93,7 @@ string text_area::text() const
 }
 
 // Set a text inside Text Area
-void text_area::text(const string &text)
+void text_area::text(const string text)
 {
   std::stringstream ss{text};
   string line;
