@@ -68,7 +68,7 @@ public:
    */
   bool is_out_of_bound(const uint16_t x, const uint16_t y) const;
 
-  const std::string &getFilename() const { return m_filename; }
+  const std::string getFilename() const { return m_filename; }
   void setFilename(const std::string filename) { m_filename = filename; }
 
   bool setPixel(const pixel &p, const uint16_t x, const uint16_t y);

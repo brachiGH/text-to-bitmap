@@ -46,13 +46,13 @@ bitmap(std::string filename, uint16_t width, uint16_t height);
 // Getters
 uint16_t getHeight() const;
 uint16_t getWidth() const;
-const std::string& getFilename() const;
+const std::string getFilename() const;
 const pixel& getPixel(uint16_t x, uint16_t y);
 
 // Setters
 void setHeight(const uint16_t height);
 void setWidth(const uint16_t width);
-void setFilename(const std::string& filename);
+void setFilename(const std::string filename);
 bool setPixel(const pixel p, const uint16_t x, const uint16_t y);
 
 // Utility Functions
@@ -90,8 +90,8 @@ void offsetY(const uint16_t y);
 void fontSize(const uint8_t fs);
 void color(const color_t& c);
 void color(const uint8_t b, const uint8_t g, const uint8_t r);
-void setline(const std::string& ln, const font_t& ft);
-void setline(const std::string& ln);
+void setline(const std::string ln, const font_t& ft);
+void setline(const std::string ln);
 void setfont(const font_t& ft);
 void characterSpacing(const uint8_t cs);
 
@@ -109,8 +109,8 @@ text_area(const int x, const int y);
 
 // Text Management
 std::string text() const; // get text
-void text(const std::string& t, const font_t& ft);
-void text(const std::string& t);
+void text(const std::string t, const font_t& ft);
+void text(const std::string t);
 
 // Spacing and Font
 uint8_t linespacing() const;
@@ -119,8 +119,8 @@ void fontSize(const uint8_t fs); // Overrides base class behavior for all lines
 
 // Deleted Functions (not available in text_area)
 const std::string& getline() = delete;
-void setline(const std::string& ln) = delete;
-void setline(const std::string& ln, const font_t& ft) = delete;
+void setline(const std::string ln) = delete;
+void setline(const std::string ln, const font_t& ft) = delete;
 ```
 
 ## An example using the line_t class

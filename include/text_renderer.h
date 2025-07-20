@@ -92,7 +92,7 @@ private:
 public:
   text_area(const int x, const int y) : line_t(x, y) {};
 
-  const string &getline() = delete;
+  const string getline() = delete;
   void setline(const string ln) = delete;
   void setline(const string ln, const font_t &ft) = delete;
 
